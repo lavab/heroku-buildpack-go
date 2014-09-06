@@ -156,6 +156,10 @@ if test -e $build/Godeps
 then
     echo "-----> Running: godep go install ${FLAGS[@]} ./..."
     godep go install "${FLAGS[@]}" ./...
+elif test -e $build/Gomfile
+then
+    echo "-----> Running: gom install ${FLAGS[@]} ./..."
+    gom install "${FLAGS[@]}" ./...
 else
     echo "-----> Running: go get ${FLAGS[@]} ./..."
     go get "${FLAGS[@]}" ./...
