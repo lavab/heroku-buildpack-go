@@ -3,6 +3,8 @@
 
 set -eo pipefail
 
+echo "Starting the build"
+
 # Go releases for Darwin beginning with 1.2rc1
 # have included more than one build, depending
 # on the specific version of Mac OS X. Try to
@@ -45,6 +47,8 @@ then arch=amd64
 fi
 plat=$(uname|tr A-Z a-z)-$arch
 
+echo "Created directories"
+
 # Python
 venv=$cache/venv
 mkdir -p $cache/pip
@@ -73,8 +77,15 @@ else
     exit 1
 fi
 
+echo "Found proper Go directory"
+
 file=${GOFILE:-$ver.$(uname|tr A-Z a-z)-amd64$(platext $ver).tar.gz}
+
+echo "Fetching URL"
+
 url=${GOURL:-$(urlfor $ver $file)}
+
+echo "Got the URL"
 
 if test -e $build/bin && ! test -d $build/bin
 then
@@ -82,15 +93,19 @@ then
     exit 1
 fi
 
+echo "Went through the basic checks"
+
 if test -d $cache/$ver/go
 then
     echo "-----> Using $ver"
 else
+    echo "Clearing cache"
     rm -rf $cache/* # be sure not to build up cruft
     mkdir -p $cache/$ver
     cd $cache/$ver
     echo -n "-----> Installing $ver..."
     curl -sO $url
+    echo "Fetched the URL"
     tar zxf $file
     rm -f $file
     echo " done"
